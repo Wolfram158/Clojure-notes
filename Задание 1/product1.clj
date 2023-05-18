@@ -8,4 +8,4 @@
           vectors))
 
 (defn get-min-product [& vectors] 
-  (apply min (mapv #(apply * %) (vec (apply get-numeric-vectors-of-max-len vectors)))))
+  (apply min (mapv #(apply * %) (apply get-numeric-vectors-of-max-len vectors))))
