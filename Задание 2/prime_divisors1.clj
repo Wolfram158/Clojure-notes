@@ -6,8 +6,7 @@
 (defn is-prime [x] 
   (cond (= x 1) false (= x 2) true 
     :else (= 
-           (- 
-            (int (Math/floor (Math/sqrt x))) 1) 
+           (- (int (Math/floor (Math/sqrt x))) 1) 
            (count (filter #(not= (rem x %) 0) (range 2 (Math/ceil (Math/sqrt x))))))))
 
 (defn get-prime-divisors [x] 
@@ -17,7 +16,7 @@
                                    #(is-prime %) 
                                    (apply conj 
                                           (vec divisors-bounded-sqrt) 
-                                          (reverse (vec (map #(/ x %) divisors-bounded-sqrt)))))))))
+                                          (reverse (mapv #(/ x %) divisors-bounded-sqrt))))))))
 
 (defn get-power [a b] 
   (cond (= (rem a b) 0) (+ 1 (get-power (int (Math/floor (/ a b))) b)) :else 0))
