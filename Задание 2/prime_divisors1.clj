@@ -24,4 +24,4 @@
 
 (defn compact-prime-divisors [x] 
   (let [prime-divisors (get-prime-divisors x)] 
-    (mapv vector (vec prime-divisors) (vec (for [t prime-divisors] (get-power x t))))))
+    (mapv vector (vec prime-divisors) (mapv (partial get-power x) prime-divisors))))
