@@ -33,15 +33,80 @@
 (def operations (set '("~" "&" "|")))
 (def variables (set '("q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "a" "s" "d" "f" "g" "h" "j" "k" "l" "z" "x" "c" "v" "b" "n" "m")))
 (def constants-map {"0" false "1" true})
-(defn split [string] (clojure.string/split string #""))
-(declare i a b c d)
-;;(def i (atom 0))
-;;(def a (atom []))
-(defn first-stage [tokens] (while (< @i (count tokens)) (cond (or (= "0" (get tokens @i)) (= "1" (get tokens @i))) (do (swap! a conj (Constant (constants-map (get tokens @i)))) (swap! i inc)) (contains? variables (get tokens @i)) (do (swap! a conj (Variable (get tokens @i))) (swap! i inc)) :else (do (swap! a conj (get tokens @i)) (swap! i inc)))))
-;;(def b (atom []))
-(defn second-stage [tokens] (while (< @i (count tokens)) (cond (= "~" (get @a @i)) (do (swap! i inc) (swap! b conj (Negate (get @a @i))) (swap! i inc)) :else (do (swap! b conj (get @a @i)) (swap! i inc)))))
-;;(def c (atom []))
-(defn third-stage [tokens] (while (< @i (count tokens)) (cond (= "&" (get @b @i)) (do (swap! c #(assoc % (dec (count @c)) (And (get @c (dec (count @c))) (get @b (+ 1 @i))))) (swap! i #(+ 2 %))) :else (do (swap! c conj (get @b @i)) (swap! i inc)))))
-;;(def d (atom (get @c 0)))
-(defn fourth-stage [tokens] (while (< @i (count tokens)) (cond (= "|" (get @c @i)) (do (swap! d #(Or % (get @c (+ 1 @i)))) (swap! i #(+ 2 %))) :else (swap! i inc))))
-(defn parse [tokens] (do (def i (atom 0)) (def a (atom [])) (first-stage (split tokens)) (reset! i 0) (def b (atom [])) (second-stage @a) (reset! i 0) (def c (atom [])) (third-stage @b) (reset! i 0) (def d (atom (get @c 0))) (fourth-stage @c)))
+(defn split [string] (let [tokens (atom (clojure.string/split string #""))] tokens))
+
+(defn parse [tokens] (let [i (atom 0) a (atom []) z (atom []) b (atom []) c (atom [])] (do
+                                                     (while (< @i (count @tokens))
+                                                       (do
+                                                         (cond
+                                                           (or (= "0" (get @tokens @i)) (= "1" (get @tokens @i)))
+                                                           (do (swap! a conj (Constant (constants-map (get @tokens @i)))))
+                                                           (contains? variables (get @tokens @i))
+                                                           (do (println (get @tokens @i)) (swap! a conj (Variable (get @tokens @i))))
+                                                           (contains? operations (get @tokens @i))
+                                                           (do (swap! a conj (get @tokens @i)))
+                                                           )
+                                                         (if
+                                                           (= "(" (get @tokens @i))
+                                                           (do
+                                                             ;;(def z (atom []))
+                                                             (swap! i inc)
+                                                             (def left (atom 1))
+                                                             (def right (atom 0))
+                                                             (while
+                                                               (not= @right @left)
+                                                               (do
+                                                                 (cond
+                                                                   (= "(" (get @tokens @i))
+                                                                   (swap! left inc)
+                                                                   (= ")" (get @tokens @i))
+                                                                   (swap! right inc) )
+                                                                 (cond
+                                                                   (or (not= @left @right) (not= (get @tokens @i) ")"))
+                                                                   (swap! z conj (get @tokens @i)))
+                                                                 (cond
+                                                                   (not= @left @right)
+                                                                   (swap! i inc))))
+                                                             (swap! a conj @(parse z)))
+                                                           )
+                                                         (swap! i inc)))
+                                                     (do
+                                                       (reset! i 0)
+                                                       ;;(def b (atom []))
+                                                       (while
+                                                         (< @i (count @a))
+                                                         (cond
+                                                           (= "~" (get @a @i))
+                                                           (do
+                                                             (swap! i inc)
+                                                             (swap! b conj (Negate (get @a @i)))
+                                                             (swap! i inc))
+                                                           :else
+                                                           (do
+                                                             (swap! b conj (get @a @i))
+                                                             (swap! i inc))))
+                                                       (reset! i 0)
+                                                       ;;(def c (atom []))
+                                                       (while
+                                                         (< @i (count @b))
+                                                         (cond
+                                                           (= "&" (get @b @i))
+                                                           (do
+                                                             (swap! c #(assoc % (dec (count @c)) (And (get @c (dec (count @c))) (get @b (+ 1 @i)))))
+                                                             (swap! i #(+ 2 %)))
+                                                           :else
+                                                           (do
+                                                             (swap! c conj (get @b @i))
+                                                             (swap! i inc))))
+                                                       (reset! i 0)
+                                                       (def d (atom (get @c 0)))
+                                                       (println @d)
+                                                       (while
+                                                         (< @i (count @c))
+                                                         (cond (= "|" (get @c @i))
+                                                               (do
+                                                                 (swap! d #(Or % (get @c (+ 1 @i))))
+                                                                 (swap! i #(+ 2 %)))
+                                                               :else
+                                                               (swap! i inc))))
+                                                     d )))
