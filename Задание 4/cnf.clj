@@ -42,7 +42,7 @@
                                                            (or (= "0" (get @tokens @i)) (= "1" (get @tokens @i)))
                                                            (do (swap! a conj (Constant (constants-map (get @tokens @i)))))
                                                            (contains? variables (get @tokens @i))
-                                                           (do (println (get @tokens @i)) (swap! a conj (Variable (get @tokens @i))))
+                                                           (do (swap! a conj (Variable (get @tokens @i))))
                                                            (contains? operations (get @tokens @i))
                                                            (do (swap! a conj (get @tokens @i)))
                                                            )
@@ -51,6 +51,7 @@
                                                            (do
                                                              ;;(def z (atom []))
                                                              (swap! i inc)
+                                                             (reset! z [])
                                                              (def left (atom 1))
                                                              (def right (atom 0))
                                                              (while
@@ -60,16 +61,19 @@
                                                                    (= "(" (get @tokens @i))
                                                                    (swap! left inc)
                                                                    (= ")" (get @tokens @i))
-                                                                   (swap! right inc) )
+                                                                   (swap! right inc))
                                                                  (cond
                                                                    (or (not= @left @right) (not= (get @tokens @i) ")"))
                                                                    (swap! z conj (get @tokens @i)))
                                                                  (cond
                                                                    (not= @left @right)
                                                                    (swap! i inc))))
-                                                             (swap! a conj @(parse z)))
+                                                             (swap! a conj @(parse z))
+                                                             ;;(println @(parse z))
+                                                             )
                                                            )
                                                          (swap! i inc)))
+                                                     ;;(println "Number " @i @a)
                                                      (do
                                                        (reset! i 0)
                                                        ;;(def b (atom []))
@@ -87,6 +91,7 @@
                                                              (swap! i inc))))
                                                        (reset! i 0)
                                                        ;;(def c (atom []))
+                                                       ;;(println "List b:" b)
                                                        (while
                                                          (< @i (count @b))
                                                          (cond
@@ -100,7 +105,7 @@
                                                              (swap! i inc))))
                                                        (reset! i 0)
                                                        (def d (atom (get @c 0)))
-                                                       (println @d)
+                                                       ;;(println "List c: " @c)
                                                        (while
                                                          (< @i (count @c))
                                                          (cond (= "|" (get @c @i))
