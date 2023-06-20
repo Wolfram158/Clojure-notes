@@ -120,7 +120,7 @@
 (defn get-map [variables-list] 
                    (atom 
                     (into {} 
-                          (map vector @variables-list (vec (for [i (range (count @variables-list))] (do 0)))))))
+                          (sort (map vector @variables-list (vec (for [i (range (count @variables-list))] (do 0))))))))
 
 (defn increment [values] (let [c (atom 1) key (vec (keys @values)) i (atom 0)] 
                      (while 
