@@ -115,3 +115,48 @@
                                                                :else
                                                                (swap! i inc))))
                                                      d )))
+(defn analyze [string] (do 
+                           (atom 
+                            (map 
+                             str 
+                             (filter #(and (< (int %) 123) (> (int %) 96)) string)))))
+
+(defn get-map [variables-list] 
+                   (atom 
+                    (into {} 
+                          (map vector @variables-list (vec (for [i (range (count @variables-list))] (do 0)))))))
+
+(defn increment [values] (let [c (atom 1) key (vec (keys @values)) i (atom 0)] 
+                     (while 
+                       (< @i (count key)) 
+                       (do 
+                         (cond 
+                           (and (= (get @values (get key @i)) 1) (= @c 1)) 
+                           (do (swap! values #(assoc % (get key @i) 0))) 
+                           (and (= (get @values (get key @i)) 0) (= @c 1)) 
+                           (do (swap! values #(assoc % (get key @i) 1)) (reset! c 0))) (swap! i inc) i))))
+
+(defn convert [values] (into {} 
+                       (map vector (keys @values) (for [[k t] @values] (cond (= t 1) true :else false)))))
+
+(defn build-term [values] (let [res (atom [])] 
+                      (for [k (keys @values)] 
+                        (cond 
+                          (= 1 (get @values k)) 
+                          (swap! res conj (str "~" k)) 
+                          :else (swap! res conj k)))))
+
+(defn cnf [string] (let [i (atom 0) result (atom []) expr (parse (split string)) values (get-map (analyze string))]
+               (do
+                 (while
+                     (< @i (Math/pow 2 (count @values)))
+                     (do
+                       (cond
+                         (= false (evaluate @expr (convert values)))
+                         (swap! result conj (str "(" (clojure.string/join "|" (last (build-term values))) ")")))
+                       (increment values)
+                       (swap! i inc)
+                       )
+                     )
+                 (clojure.string/join "&" @result))
+               ))
