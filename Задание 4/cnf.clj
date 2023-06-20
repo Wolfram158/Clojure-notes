@@ -76,7 +76,6 @@
                                                          (swap! i inc)))
                                                      (do
                                                        (reset! i 0)
-                                                       ;;(def b (atom []))
                                                        (while
                                                          (< @i (count @a))
                                                          (cond
