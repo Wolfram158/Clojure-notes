@@ -32,15 +32,17 @@
 
 (def operations (set '("~" "&" "|")))
 (def variables (set '("q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "a" "s" "d" "f" "g" "h" "j" "k" "l" "z" "x" "c" "v" "b" "n" "m")))
-(def constants-map {"0" false "1" true})
-(defn split [string] (let [tokens (atom (clojure.string/split string #""))] tokens))
+(def False (Constant false))
+(def True (Constant true))
+(def constants-map {"0" False "1" True})
+(defn split [string] (atom (clojure.string/split string #"")))
 
 (defn parse [tokens] (let [i (atom 0) a (atom []) z (atom []) b (atom []) c (atom [])] (do
                                                      (while (< @i (count @tokens))
                                                        (do
                                                          (cond
                                                            (or (= "0" (get @tokens @i)) (= "1" (get @tokens @i)))
-                                                           (do (swap! a conj (Constant (constants-map (get @tokens @i)))))
+                                                           (do (swap! a conj (constants-map (get @tokens @i))))
                                                            (contains? variables (get @tokens @i))
                                                            (do (swap! a conj (Variable (get @tokens @i))))
                                                            (contains? operations (get @tokens @i))
@@ -69,11 +71,9 @@
                                                                    (not= @left @right)
                                                                    (swap! i inc))))
                                                              (swap! a conj @(parse z))
-                                                             ;;(println @(parse z))
                                                              )
                                                            )
                                                          (swap! i inc)))
-                                                     ;;(println "Number " @i @a)
                                                      (do
                                                        (reset! i 0)
                                                        ;;(def b (atom []))
@@ -90,8 +90,6 @@
                                                              (swap! b conj (get @a @i))
                                                              (swap! i inc))))
                                                        (reset! i 0)
-                                                       ;;(def c (atom []))
-                                                       ;;(println "List b:" b)
                                                        (while
                                                          (< @i (count @b))
                                                          (cond
@@ -105,7 +103,6 @@
                                                              (swap! i inc))))
                                                        (reset! i 0)
                                                        (def d (atom (get @c 0)))
-                                                       ;;(println "List c: " @c)
                                                        (while
                                                          (< @i (count @c))
                                                          (cond (= "|" (get @c @i))
