@@ -4,10 +4,6 @@
 (defn toString [arg]
   (:toString arg))
 
-(def False (Constant false))
-(def True (Constant true))
-(def constants-map {"0" False "1" True})
-
 (defn Variable [arg]
   {
    :evaluate (fn [env] (env arg))
@@ -26,6 +22,44 @@
    :signature "const"
    :priority 0
    })
+
+(def False (Constant false))
+(def True (Constant true))
+(def constants-map {"0" False "1" True})
+
+(defn operation [op priority f g]
+  (fn [& operands]
+    {
+     :evaluate (fn [args] (apply f (mapv #(evaluate % args) operands)))
+     :toString (str "(" op " " (clojure.string/join " " (map toString operands)) ")")
+     :toMiniString (apply g operands)
+     :signature op
+     :priority priority
+     :l (first operands)
+     :r (second operands)
+     }))
+
+(def And (operation "&" 2 #(and %1 %2)
+                    #(cond (and (= (get %1 :priority) 1) (= (get %2 :priority) 1))
+                           (str "(" (get %1 :toMiniString) ")&(" (get %2 :toMiniString) ")")
+                           (= (get %1 :priority) 1)
+                           (str "(" (get %1 :toMiniString) ")&" (get %2 :toMiniString))
+                           (= (get %2 :priority) 1)
+                           (str (get %1 :toMiniString) "&(" (get %2 :toMiniString) ")")
+                           :else
+                           (str (get %1 :toMiniString) "&" (get %2 :toMiniString))
+                           )))
+(def Or (operation "|" 1 #(or %1 %2)
+                   #(str (get %1 :toMiniString) "|" (get %2 :toMiniString))))
+(def Negate (operation "~" 3 not
+                       #(cond (> (get %1 :priority) 0)
+                              (cond (not= (get %1 :priority) 3)
+                                    (str "~(" (get (get %1 :l) :toMiniString) (get %1 :signature)
+                                         (get (get %1 :r) :toMiniString) ")")
+                                    :else
+                                    (str "~(" (get %1 :toMiniString) ")"))
+                              :else
+                              (str "~" (get %1 :toMiniString)))))
 
 (defn push [expr] (cond (= (get expr :signature) "&")
                         (And (push (get expr :l)) (push (get expr :r)))
@@ -96,40 +130,6 @@
                             :else
                             expr
                             ))
-
-(defn operation [op priority f g]
-  (fn [& operands]
-    {
-     :evaluate (fn [args] (apply f (mapv #(evaluate % args) operands)))
-     :toString (str "(" op " " (clojure.string/join " " (map toString operands)) ")")
-     :toMiniString (apply g operands)
-     :signature op
-     :priority priority
-     :l (first operands)
-     :r (second operands)
-     }))
-
-(def And (operation "&" 2 #(and %1 %2)
-                    #(cond (and (= (get %1 :priority) 1) (= (get %2 :priority) 1))
-                           (str "(" (get %1 :toMiniString) ")&(" (get %2 :toMiniString) ")")
-                           (= (get %1 :priority) 1)
-                           (str "(" (get %1 :toMiniString) ")&" (get %2 :toMiniString))
-                           (= (get %2 :priority) 1)
-                           (str (get %1 :toMiniString) "&(" (get %2 :toMiniString) ")")
-                           :else
-                           (str (get %1 :toMiniString) "&" (get %2 :toMiniString))
-                           )))
-(def Or (operation "|" 1 #(or %1 %2)
-                   #(str (get %1 :toMiniString) "|" (get %2 :toMiniString))))
-(def Negate (operation "~" 3 not
-                       #(cond (> (get %1 :priority) 0)
-                              (cond (not= (get %1 :priority) 3)
-                                    (str "~(" (get (get %1 :l) :toMiniString) (get %1 :signature)
-                                         (get (get %1 :r) :toMiniString) ")")
-                                    :else
-                                    (str "~(" (get %1 :toMiniString) ")"))
-                              :else
-                              (str "~" (get %1 :toMiniString)))))
 
 (def operations (set '("~" "&" "|")))
 (def variables (set '("q" "w" "e" "r" "t" "y" "u" "i" "o" "p" "a" "s" "d" "f" "g" "h" "j" "k" "l" "z" "x" "c" "v" "b" "n" "m")))
@@ -214,3 +214,19 @@
 (defn push-string [string] (get (push (parse-string string)) :toMiniString))
 (defn simplify-string [string] (get (simplify (parse-string string)) :toMiniString))
 (defn push-and-simplify-string [string] (get (simplify (push (parse-string string))) :toMiniString))
+
+(do (println "Test 1: " (push-string "~(a|b)"))
+    (println "Test 2: " (push-string "~(a&b)"))
+    (println "Test 3: " (push-string "~(a&b|c|(d|~(f&~g)&y|e))"))
+    (println "Test 4: " (push-string "a&b|~(c&d|~f|~(h|~x)|u&~v|w)&~p|t"))
+    (println "Test 5: " (push-string "a&b|(c|(r|a&~(f|~g&b&n&u|~t|y)))|~a"))
+    (println "Test 6: " (push-string "~a&~(b|~(c|~h&(~f|~(k|~(b&~c)))))"))
+    (println "Test 7: " (push-string "~(~(~(~a|b|c&d)&e|r)|~t&f|o)"))
+    (println "Test 8: " (push-string "~0|b&(~a|1&~(0|b&c|i&~0&1))|~1"))
+    (println "Test 9: " (push-and-simplify-string "~0|b&(~a|1&~(0|b&c|i&~0&1))|~1"))
+    (println "Test 10: " (simplify-string "~0|b&(~a|1&~(0|b&c|i&~0&1))|~1"))
+    (println "Test 11: " (push-string "~(~a|~(b&c)&~i)"))
+    (println "Test 12: " (push-string "~1&a|~(b|~(a&b|~(u|v&~y)|t&~0|(~(a&~(b|c|0)&1))))"))
+    (println "Test 13: " (push-and-simplify-string "~1&a|~(b|~(a&b|~(u|v&~y)|t&~1|(~(a&~(b|c|0)&1))))"))
+    (println "Test 14: " (simplify-string "~1&a|~(b|~(a&b|~(u|v&~y)|t&~1|(~(a&~(b|c|0)&1))))"))
+    (println "Test 15: " (push-and-simplify-string "0|~(b|~c&(a|b|y&~0&i|~(u|~i&(1|0|~t|~(f|g)))|g|~(v|1)))")))
