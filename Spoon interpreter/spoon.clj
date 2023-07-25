@@ -16,42 +16,30 @@
 (def test-input (abstract-test "0010110"))
 (def test-print (abstract-test "001010"))
 
+(defmacro if-test [i result sign number] `(do
+                                   (swap! ~result #(str % ~sign))
+                                   (swap! ~i #(+ % ~number))))
+
 (defn spoonToBF [s] (let [i (atom 0) result (atom "")]
                       (do
                         (while (< @i (count s))
                           (cond
                             (test-inc s @i)
-                            (do
-                              (swap! result #(str % "+"))
-                              (swap! i inc))
+                            (if-test i result "+" 1)
                             (test-dec s @i)
-                            (do
-                              (swap! result #(str % "-"))
-                              (swap! i #(+ % 3)))
+                            (if-test i result "-" 3)
                             (test-next s @i)
-                            (do
-                              (swap! result #(str % ">"))
-                              (swap! i #(+ % 3)))
+                            (if-test i result ">" 3)
                             (test-prev s @i)
-                            (do
-                              (swap! result #(str % "<"))
-                              (swap! i #(+ % 3)))
+                            (if-test i result "<" 3)
                             (test-cycle-begin s @i)
-                            (do
-                              (swap! result #(str % "["))
-                              (swap! i #(+ % 5)))
+                            (if-test i result "[" 5)
                             (test-cycle-end s @i)
-                            (do
-                              (swap! result #(str % "]"))
-                              (swap! i #(+ % 4)))
+                            (if-test i result "]" 4)
                             (test-input s @i)
-                            (do
-                              (swap! result #(str % ","))
-                              (swap! i #(+ % 7)))
+                            (if-test i result "," 7)
                             (test-print s @i)
-                            (do
-                              (swap! result #(str % "."))
-                              (swap! i #(+ % 6)))
+                            (if-test i result "." 6)
                             :else
                             (do
                               (println "Unsupported command begins at:" @i)
