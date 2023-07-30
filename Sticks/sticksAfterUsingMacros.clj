@@ -411,4 +411,3 @@
 ;; .  _  .  _  .  _  .
 ;; Player  Peter  has won.
 ;; nil
-Process finished with exit code 0
