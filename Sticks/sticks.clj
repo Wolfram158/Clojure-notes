@@ -280,3 +280,90 @@
 (def player2 (HumanPlayer "Peter" "B"))
 (def board (Board 2 2))
 (play board [player1 player2])
+
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 1 2 1
+;; .  _  .     .
+;;
+;; .     .     .
+;;
+;; .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 3 3 3
+;; .  _  .     .
+;;
+;; .     .     .
+;;
+;; .     .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 2 1 3 1
+;; .  _  .  _  .
+;;
+;; .     .     .
+;;
+;; .     .  _  .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 1 3 2 3
+;; .  _  .  _  .
+;;
+;; .     .     .
+;;
+;; .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 1 1 2
+;; .  _  .  _  .
+;; |
+;; .     .     .
+;;
+;; .  _  .  _  .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 3 3 3 2
+;; .  _  .  _  .
+;; |
+;; .     .     .
+;;             |
+;; .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 2 2 2
+;; .  _  .  _  .
+;; |
+;; .  _  .     .
+;;             |
+;; .  _  .  _  .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 2 2 1
+;; .  _  .  _  .
+;; |  B  |
+;; .  _  .     .
+;;             |
+;; .  _  .  _  .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 2 3 2
+;; .  _  .  _  .
+;; |  B  |
+;; .  _  .  _  .
+;;             |
+;; .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 3 1 3 2
+;; .  _  .  _  .
+;; |  B  |  A  |
+;; .  _  .  _  .
+;;             |
+;; .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 2 3 2 2
+;; .  _  .  _  .
+;; |  B  |  A  |
+;; .  _  .  _  .
+;;       |  A  |
+;; .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 2 1 3
+;; .  _  .  _  .
+;; |  B  |  A  |
+;; .  _  .  _  .
+;; |  A  |  A  |
+;; .  _  .  _  .
+;; Player  Paul  has won.
+;; nil
