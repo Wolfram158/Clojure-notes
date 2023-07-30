@@ -192,3 +192,223 @@
 (def player2 (HumanPlayer "Peter" "B"))
 (def board (Board 2 2))
 (play board [player1 player2])
+
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 1 2 1
+;; .  _  .     .     .
+;; 
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 1 2 2
+;; .  _  .     .     .
+;;       |
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 2 2 3 2
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;; 
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 3 2 3 3
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;             |
+;; .     .     .     .
+;; 
+;; .     .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 3 3 4 3
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;             |
+;; .     .     .  _  .
+;; 
+;; .     .     .     .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 4 4 4 3
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;             |
+;; .     .     .  _  .
+;;                   |
+;; .     .     .     .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 4 2 4
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;             |
+;; .     .     .  _  .
+;;                   |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 4 2 3
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;             |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 2 3 2 2
+;; .  _  .     .     .
+;;       |
+;; .     .  _  .     .
+;;       |     |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 2 1 3 1
+;; .  _  .  _  .     .
+;;       |
+;; .     .  _  .     .
+;;       |     |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 4 1 3 1
+;; .  _  .  _  .  _  .
+;;       |
+;; .     .  _  .     .
+;;       |     |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 4 1 4 2
+;; .  _  .  _  .  _  .
+;;       |           |
+;; .     .  _  .     .
+;;       |     |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 4 2 4 3
+;; .  _  .  _  .  _  .
+;;       |           |
+;; .     .  _  .     .
+;;       |     |     |
+;; .     .     .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 3 3 3
+;; .  _  .  _  .  _  .
+;;       |           |
+;; .     .  _  .     .
+;;       |  B  |     |
+;; .     .  _  .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 3 2 4 2
+;; .  _  .  _  .  _  .
+;;       |           |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 3 1 3 2
+;; .  _  .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |           |
+;; .  _  .     .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 2 4 3 4
+;; .  _  .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |           |
+;; .  _  .  _  .     .
+;; Player  Peter  is inputting x1, y1, x2, y2 respectively:
+;; 3 4 4 4
+;; .  _  .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |           |
+;; .  _  .  _  .  _  .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 3 4 3 3
+;; .  _  .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 1 1 1 2
+;; .  _  .  _  .  _  .
+;; |     |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Michael  is inputting x1, y1, x2, y2 respectively:
+;; 1 2 1 3
+;; .  _  .  _  .  _  .
+;; |     |  B  |  B  |
+;; .     .  _  .  _  .
+;; |     |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 2 2 2
+;; .  _  .  _  .  _  .
+;; |  A  |  B  |  B  |
+;; .  _  .  _  .  _  .
+;; |     |  B  |  B  |
+;; .     .  _  .  _  .
+;;       |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 3 2 3
+;; .  _  .  _  .  _  .
+;; |  A  |  B  |  B  |
+;; .  _  .  _  .  _  .
+;; |  A  |  B  |  B  |
+;; .  _  .  _  .  _  .
+;;       |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
+;; 1 4 1 3
+;; .  _  .  _  .  _  .
+;; |  A  |  B  |  B  |
+;; .  _  .  _  .  _  .
+;; |  A  |  B  |  B  |
+;; .  _  .  _  .  _  .
+;; |  A  |  C  |  C  |
+;; .  _  .  _  .  _  .
+;; Player  Peter  has won.
+;; nil
+Process finished with exit code 0
