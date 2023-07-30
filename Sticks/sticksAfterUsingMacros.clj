@@ -191,7 +191,7 @@
 (def player1 (HumanPlayer "Paul" "A"))
 (def player2 (HumanPlayer "Peter" "B"))
 (def player3 (HumanPlayer "Michael" "C"))
-(def board (Board 2 2))
+(def board (Board 3 3))
 (play board [player1 player2 player3])
 
 ;; Player  Paul  is inputting x1, y1, x2, y2 respectively:
